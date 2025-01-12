@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Simplu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            width: 600px;
+        }
+        input::-webkit-inner-spin-button, 
+        input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculator Simplu</h1>
+
+    <input type="text" id="number1" placeholder="Scrie orice">
+    <input type="text" id="number2" placeholder="Scrie orice">
+
+    <br>
+
+    <button onclick="sendToServer()">Trimite expresia</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        async function sendToServer() {
+            const num1 = document.getElementById('number1').value; 
+            const num2 = document.getElementById('number2').value;
+
+            try {
+                const response = await fetch('http://localhost:5000/result', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ a: num1, b: num2 }) // asta i sa trimita direct valorile
+                });
+
+                const result = await response.text();
+                document.getElementById('result').textContent = result;
+            } catch (error) {
+                document.getElementById('result').textContent = "A apărut o eroare la conectarea cu serverul.";
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
